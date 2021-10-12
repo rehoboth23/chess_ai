@@ -1,5 +1,7 @@
-from random import random
+from time import sleep
+
 import chess
+
 from MinimaxAI import MinimaxAI
 
 
@@ -14,41 +16,41 @@ class AlphaBetaAI(MinimaxAI):
     def minmax_decision(self, board):
         return super().minmax_decision(board)
 
-    def max(self, board, depth, min_seen=float("inf")):
+    def max(self, board, depth, beta=float("inf")):
         if self.cut_off_test(board, depth):
             return super().calculate_score(board), None
-        moves = sorted(board.legal_moves, key=lambda x: random())
-        cost = -float("inf")
+        moves = self.make_moves(board)
+        score = -float("inf")
         res_move = None
         for move in moves:
             self.nodes_visited += 1
             board.push(move)
-            cost_of_move, _ = self.min(board, depth + 1, cost)
+            score_of_move, _ = self.min(board, depth + 1, score)
             board.pop()
-            if cost_of_move > cost:
-                cost = cost_of_move
+            if score_of_move >= score:
+                score = score_of_move
                 res_move = move
-            if min_seen < cost:
+            if beta < score:
                 break
-        return cost, res_move
+        return score, res_move
 
-    def min(self, board, depth, max_seen=-float("inf")):
+    def min(self, board, depth, alpha=-float("inf")):
         if self.cut_off_test(board, depth):
             return super().calculate_score(board), None
-        cost = float("inf")
+        score = float("inf")
         res_move = None
-        moves = sorted(board.legal_moves, key=lambda x: random())
+        moves = self.make_moves(board)
         for move in moves:
             self.nodes_visited += 1
             board.push(move)
-            cost_of_move, _ = self.max(board, depth + 1, cost)
+            score_of_move, _ = self.max(board, depth + 1, score)
             board.pop()
-            if cost_of_move < cost:
-                cost = cost_of_move
+            if score_of_move <= score:
+                score = score_of_move
                 res_move = move
-            if max_seen > cost:
+            if alpha > score:
                 break
-        return cost, res_move
+        return score, res_move
 
     def calculate_score(self, board):
         return super().calculate_score(board)
