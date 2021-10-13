@@ -16,18 +16,20 @@ class MinimaxAI:
         return self.minmax_decision(my_board)
 
     def minmax_decision(self, board):
-        self.nodes_visited = 0
+        # self.nodes_visited = 0
         score, move = self.max(board, 0)
-        print(f"{self.name} making move {self.player} -> {move} after visiting {self.nodes_visited} nodes")
+        print(f"{self.name} {'white' if self.player else 'black'} making move {self.player} -> {move} after visiting {self.nodes_visited} nodes")
         if self.player:
             open(self.name, "a").write(f"{str(move)}: {score}")
+        self.last_move = move
         return move
 
     def max(self, board, depth):
+        # chooses the best move for the maximizer player by maximizing the score.
         if self.cut_off_test(board, depth):
             return self.calculate_score(board), None
         moves = self.make_moves(board)
-        score = -float("inf")
+        score = -float("inf")  # if the player doesn't make a move interpret it as the lowest possible score
         res_move = None
         for move in moves:
             self.nodes_visited += 1
@@ -40,9 +42,11 @@ class MinimaxAI:
         return score, res_move
 
     def min(self, board, depth):
+        # chooses best move for the minimizer player by minimizing the score which reflects the best choice for the
+        # maximizer player
         if self.cut_off_test(board, depth):
             return self.calculate_score(board), None
-        score = float("inf")
+        score = float("inf") # if the player doesn't make a move interpret it as the highest possible score
         res_move = None
         moves = self.make_moves(board)
         for move in moves:
@@ -56,10 +60,11 @@ class MinimaxAI:
         return score, res_move
 
     def calculate_score(self, board):
+        # a higher score reflects a better outcome for the maximizer player and a lower score a worse outcome
         score = 0
         other_score = 0
         fen = board.fen()
-        for c in fen:
+        for c in fen:  # score depends on the number and value of players pieces on the board
             if c.isalpha():
                 s = self.scores[c.lower()]
                 if (c.islower() and not self.player) or \
@@ -70,7 +75,7 @@ class MinimaxAI:
             elif c == " ":
                 break
 
-        # can allow the player to make sacrifices to win. prioritizes taking opponents officials
+        # can allow the player to make sacrifices to win by prioritizes taking opponents officials
         score -= other_score
         # work towards a check and avoid being checked but not at the expense of any players
         score += 50 if board.is_check() and board.turn != self.player else 0
@@ -88,8 +93,10 @@ class MinimaxAI:
         return score
 
     def cut_off_test(self, board, depth):
+        # check if the search is at a terminal tate
         return board.is_game_over() or depth > self.depth
 
     @staticmethod
     def make_moves(board):
+        # get set of legal moves from board and convert to a list
         return list(board.legal_moves)

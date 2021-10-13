@@ -53,7 +53,7 @@ class ChessGui:
 
 if __name__ == "__main__":
     player1 = AlphaBetaAI(1, chess.WHITE)
-    player2 = IterativeDeepeningAI(2, chess.BLACK)
+    player2 = AlphaBetaAI(1, chess.BLACK)
     gui = ChessGui(player1, player2)
     gui.start()
     sys.exit(gui.app.exec_())

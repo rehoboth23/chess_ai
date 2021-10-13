@@ -32,12 +32,3 @@ class IterativeDeepeningAI(AlphaBetaAI):
         self.best_move = (-float("inf"), None)
         self.depth = true_depth
         return move
-
-    def max(self, board, depth, beta=float("inf")):
-        return super().max(board, depth, beta)
-
-    def min(self, board, depth, alpha=-float("inf")):
-        return super().min(board, depth, alpha)
-
-    def calculate_score(self, board):
-        return super().calculate_score(board)

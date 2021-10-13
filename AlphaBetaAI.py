@@ -3,9 +3,13 @@ from time import sleep
 import chess
 
 from MinimaxAI import MinimaxAI
+from boxes import get_box
 
 
 class AlphaBetaAI(MinimaxAI):
+    """
+    All of this mostly inherits from minmax AI
+    """
     def __init__(self, depth, player):
         super().__init__(depth, player)
         self.name = "alpha_beta"
@@ -17,6 +21,7 @@ class AlphaBetaAI(MinimaxAI):
         return super().minmax_decision(board)
 
     def max(self, board, depth, beta=float("inf")):
+        # bets is the lowest score seen  by the minimizer player of caller
         if self.cut_off_test(board, depth):
             return super().calculate_score(board), None
         moves = self.make_moves(board)
@@ -30,7 +35,8 @@ class AlphaBetaAI(MinimaxAI):
             if score_of_move >= score:
                 score = score_of_move
                 res_move = move
-            if beta < score:
+            if beta <= score:  # if the score is greater than beta, since we will maximize and the minimizer player will
+                # minimize our result, then it cannot choose anything from this call. break at this point
                 break
         return score, res_move
 
@@ -48,7 +54,8 @@ class AlphaBetaAI(MinimaxAI):
             if score_of_move <= score:
                 score = score_of_move
                 res_move = move
-            if alpha > score:
+            if alpha >= score: # if the score is less than alpha, since we will minimize and the maximizer player will
+                # maximize our result, then it cannot choose anything from this call. break at this point
                 break
         return score, res_move
 
