@@ -12,6 +12,10 @@ class MinimaxAI:
         self.name = "minmax"
 
     def choose_move(self, board: chess.Board):
+        if self.nodes_visited == 0:
+            f1 = open(self.name, "r+")
+            f1.truncate(0)
+            f1.close()
         my_board = chess.Board(board.fen())
         return self.minmax_decision(my_board)
 
@@ -20,8 +24,7 @@ class MinimaxAI:
         score, move = self.max(board, 0)
         print(f"{self.name} {'white' if self.player else 'black'} making move {self.player} -> {move} after visiting {self.nodes_visited} nodes")
         if self.player:
-            open(self.name, "a").write(f"{str(move)}: {score}")
-        self.last_move = move
+            open(self.name, "a").write(f"{str(move)}: {score}\n")
         return move
 
     def max(self, board, depth):

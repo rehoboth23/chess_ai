@@ -35,7 +35,7 @@ class AlphaBetaAI(MinimaxAI):
             if score_of_move >= score:
                 score = score_of_move
                 res_move = move
-            if beta <= score:  # if the score is greater than beta, since we will maximize and the minimizer player will
+            if beta < score:  # if the score is greater than beta, since we will maximize and the minimizer player will
                 # minimize our result, then it cannot choose anything from this call. break at this point
                 break
         return score, res_move
@@ -54,7 +54,7 @@ class AlphaBetaAI(MinimaxAI):
             if score_of_move <= score:
                 score = score_of_move
                 res_move = move
-            if alpha >= score: # if the score is less than alpha, since we will minimize and the maximizer player will
+            if alpha > score: # if the score is less than alpha, since we will minimize and the maximizer player will
                 # maximize our result, then it cannot choose anything from this call. break at this point
                 break
         return score, res_move

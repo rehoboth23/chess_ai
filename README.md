@@ -65,6 +65,11 @@
         unreasonable sacrifices for a check (50 is also the minimum score required on a board to checkmate a lone king)
         The player will work towards a stalemate if it lacks the required amount of pieces to checkmate the opponent
         The player will also work towards a draw in the same situation
+
+
+*Test Tools:
+        The AI's track the number of nodes they visit.
+        run test_moves_chess to check if alpha beta and minimax make the same decisions in a same game situation
         
         
 
